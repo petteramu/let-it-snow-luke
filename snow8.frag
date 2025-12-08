@@ -72,5 +72,7 @@ void main() {
 	isSnow = max(snow_layer(st, 160.), isSnow);
 	isSnow = max(snow_layer(st, 200.), isSnow);
 	isSnow = max(snow_layer(st, 220.), isSnow);
+    // Cut when under 40% of the screen height
+    isSnow = step(st.y, 0.4) * isSnow;
     gl_FragColor = vec4(isSnow * .6);
 }
