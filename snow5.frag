@@ -25,5 +25,6 @@ void main() {
 	float isSnow = snow_layer(st, 0.08, 150., 1.);
 	isSnow += snow_layer(st, 0.06, 225., .5);
 	isSnow += snow_layer(st, 0.05, 300., .25);
-    gl_FragColor = vec4(isSnow);
+    vec4 color = vec4(0., 0., 0., 1.);
+    gl_FragColor = vec4(color + isSnow * .3);
 }
