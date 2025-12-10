@@ -74,5 +74,5 @@ void main() {
 	isSnow = max(snow_layer(uv, 160.), isSnow);
 	isSnow = max(snow_layer(uv, 200.), isSnow);
 	isSnow = max(snow_layer(uv, 220.), isSnow);
-    gl_FragColor = vec4(isSnow * .6);
+    gl_FragColor = vec4(isSnow * .55);
 }
