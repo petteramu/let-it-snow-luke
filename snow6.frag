@@ -5,40 +5,39 @@ precision mediump float;
 #define WIND_DIR vec2(.0, .5)
 #define WIND_STRENGTH .25
 
-uniform vec2 u_resolution;
-uniform vec2 u_mouse;
 uniform float u_time;
+uniform vec2 u_resolution;
 
-vec2 hash2( vec2 p )
+vec2 random2( vec2 p )
 {
 	return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);
 }
 
 float voronoi(in vec2 x)
 {
-    vec2 n = floor(x);
+    vec2 cellId = floor(x);
     vec2 f = fract(x);
 
 	vec2 mg, mr;
 
-    float md = 8.0;
+    float minDist = 8.0;
     for( int j=-1; j<=1; j++ )
     for( int i=-1; i<=1; i++ )
     {
-        vec2 g = vec2(i, j);
-		vec2 o = hash2( n + g );
-        vec2 r = g + o - f;
-        float d = dot(r,r);
+        vec2 nabo = vec2(i, j);
+		vec2 punkt = random2( cellId + nabo );
+        vec2 r = nabo + punkt - f;
+        float dist = dot(r,r);
 
-        if( d<md )
+        if( dist<minDist )
         {
-            md = d;
+            minDist = dist;
             mr = r;
-            mg = g;
+            mg = nabo;
         }
     }
 
-    return md;
+    return minDist;
 }
 
 float snow_layer(vec2 uv, float num_flakes) {
@@ -49,7 +48,7 @@ float snow_layer(vec2 uv, float num_flakes) {
     float d = voronoi(cr * uv);
     
     float flake_size = 0.25 / num_flakes;
-    float smooth = 1.25 * flake_size;
+    float smooth = .75 * flake_size;
     
 	float dist = length(d);
     float isSnow = smoothstep(flake_size + smooth, flake_size - smooth, dist);
@@ -57,16 +56,16 @@ float snow_layer(vec2 uv, float num_flakes) {
 }
 
 void main() {
-    vec2 st = gl_FragCoord.xy/u_resolution.xy;
-	float isSnow = snow_layer(st, 70.);
-	isSnow = max(snow_layer(st, 85.), isSnow);
-	isSnow = max(snow_layer(st, 100.), isSnow);
-	isSnow = max(snow_layer(st, 130.), isSnow);
-	isSnow = max(snow_layer(st, 150.), isSnow);
-	isSnow = max(snow_layer(st, 140.), isSnow);
-	isSnow = max(snow_layer(st, 160.), isSnow);
-	isSnow = max(snow_layer(st, 200.), isSnow);
-	isSnow = max(snow_layer(st, 220.), isSnow);
+    vec2 uv = gl_FragCoord.xy/u_resolution.xy;
+	float isSnow = snow_layer(uv, 70.);
+	isSnow = max(snow_layer(uv, 85.), isSnow);
+	isSnow = max(snow_layer(uv, 100.), isSnow);
+	isSnow = max(snow_layer(uv, 130.), isSnow);
+	isSnow = max(snow_layer(uv, 150.), isSnow);
+	isSnow = max(snow_layer(uv, 140.), isSnow);
+	isSnow = max(snow_layer(uv, 160.), isSnow);
+	isSnow = max(snow_layer(uv, 200.), isSnow);
+	isSnow = max(snow_layer(uv, 220.), isSnow);
     vec4 color = vec4(0., 0., 0., 1.);
     gl_FragColor = vec4(color + isSnow * .3);
 }

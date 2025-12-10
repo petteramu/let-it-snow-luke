@@ -6,7 +6,6 @@ precision mediump float;
 #define WIND_STRENGTH .25
 
 uniform vec2 u_resolution;
-uniform vec2 u_mouse;
 uniform float u_time;
 
 float snow_layer(vec2 uv, float flake_size, float num_flakes, float wind_mod) {
@@ -21,10 +20,10 @@ float snow_layer(vec2 uv, float flake_size, float num_flakes, float wind_mod) {
 }
 
 void main() {
-    vec2 st = gl_FragCoord.xy/u_resolution.xy;
-	float isSnow = snow_layer(st, 0.08, 150., 1.);
-	isSnow += snow_layer(st, 0.06, 225., .5);
-	isSnow += snow_layer(st, 0.05, 300., .25);
+    vec2 uv = gl_FragCoord.xy/u_resolution.xy;
+	float isSnow = snow_layer(uv, 0.08, 150., 1.);
+	isSnow += snow_layer(uv, 0.06, 225., .5);
+	isSnow += snow_layer(uv, 0.05, 300., .25);
     vec4 color = vec4(0., 0., 0., 1.);
     gl_FragColor = vec4(color + isSnow * .3);
 }
