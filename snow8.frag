@@ -74,6 +74,6 @@ void main() {
 	isSnow = max(snow_layer(uv, 160.), isSnow);
 	isSnow = max(snow_layer(uv, 200.), isSnow);
 	isSnow = max(snow_layer(uv, 220.), isSnow);
-    float snow = step(0.45, uv.y) * isSnow;
+    float snow = step(1., uv.y) * isSnow;
     gl_FragColor = vec4(snow * .6);
 }
