@@ -63,7 +63,8 @@ float snow_layer(vec2 uv, float num_flakes) {
 }
 
 void main() {
-    vec2 uv = gl_FragCoord.xy/u_resolution.xy;
+    vec2 uv = (gl_FragCoord.xy / u_resolution.xy) * 2.0 - 1.0;
+	uv.x *= u_resolution.x / u_resolution.y;   // apply aspect ratio correction
 	float isSnow = snow_layer(uv, 70.);
 	isSnow = max(snow_layer(uv, 85.), isSnow);
 	isSnow = max(snow_layer(uv, 100.), isSnow);
