@@ -44,7 +44,7 @@ float voronoi(in vec2 x)
 float snow_layer(vec2 uv, float num_flakes) {
     float layer = 70. / num_flakes;
     float wind_mod = 70. / num_flakes;
-    uv += u_time * WIND_DIR * WIND_STRENGTH * wind_mod;
+    uv += 999. + u_time * WIND_DIR * WIND_STRENGTH * wind_mod;
     
     float dir_var = 1. + sin(uv.x/100.+u_time)/4.;
     uv += vec2(dir_var/5., dir_var / 100.);
@@ -53,9 +53,9 @@ float snow_layer(vec2 uv, float num_flakes) {
     vec2 grid = uv * cr;
     float d = voronoi(cr * uv);
     
-    vec2 size_var = random2(floor(grid)) * .25;
-    float flake_size = (0.25 + size_var.x) / num_flakes;
-    float smooth = .75 * flake_size;
+    vec2 size_var = random2(vec2(floor(d))) * .25;
+    float flake_size = (0.25 + length(size_var)) / num_flakes;
+    float smooth = 1.0 * flake_size;
     
 	float dist = length(d);
     float isSnow = smoothstep(flake_size + smooth, flake_size - smooth, dist);
